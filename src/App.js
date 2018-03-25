@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { compose, graphql } from 'react-apollo';
+import gql from 'graphql-tag';
 
 class App extends Component {
   render() {
@@ -13,12 +15,24 @@ class App extends Component {
             </div>
           )
         }
+        {
+          !this.props.data.loading ? this.props.data.hello : 'Loading...'
+        }
         </div>
     );
   }
 }
+
 const mapStateToProps = (state) => {
   return { blogs: state };
 }
+const query = gql`
+{
+  hello
+}
+`;
 
-export default connect(mapStateToProps)(App);
+export default compose(
+  graphql(query),
+  connect(mapStateToProps),
+)(App);
